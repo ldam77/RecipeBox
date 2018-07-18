@@ -16,7 +16,7 @@ namespace RecipeBox.Models
     (int newRecipeID, int newIngredientID, int newID = 0)
     {
       recipeID = newRecipeID;
-      ingredientID = newIngredientID
+      ingredientID = newIngredientID;
       id = newID;
     }
     public int GetRecipeID()
@@ -41,7 +41,7 @@ namespace RecipeBox.Models
       {
         RecipeIngredients newRecipeIngredients = (RecipeIngredients) otherRecipeIngredients;
         bool recipeIDEquality = (this.GetRecipeID() == newRecipeIngredients.GetRecipeID());
-        bool ingredientIDEquality = (this.GetIngredientID() == newRecipeIngredientd.GetIngredientID());
+        bool ingredientIDEquality = (this.GetIngredientID() == newRecipeIngredients.GetIngredientID());
         bool idEquality = (this.GetId() == newRecipeIngredients.GetId());
         return (recipeIDEquality && ingredientIDEquality && idEquality);
       }
@@ -53,11 +53,11 @@ namespace RecipeBox.Models
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
       cmd.CommandText = @"INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES (@inputRecipeID, @inputIngredientID);";
       MySqlParameter newRecipeID = new MySqlParameter();
-      newRecipeID.ParameterRecipeID = "@inputRecipeID";
+      newRecipeID.ParameterName = "@inputRecipeID";
       newRecipeID.Value = this.recipeID;
       cmd.Parameters.Add(newRecipeID);
       MySqlParameter newIngredientID = new MySqlParameter();
-      newIngredientID.ParameterIngredientID = "@inputIngredientID";
+      newIngredientID.ParameterName = "@inputIngredientID";
       newIngredientID.Value = this.ingredientID;
       cmd.Parameters.Add(newIngredientID);
       cmd.ExecuteNonQuery();
@@ -68,9 +68,9 @@ namespace RecipeBox.Models
         conn.Dispose();
       }
     }
-    public static List<RecipeIngredient> GetAll()
+    public static List<RecipeIngredients> GetAll()
     {
-      List<RecipeIngredient> allRecipeIngredients = new List<RecipeIngredient> {};
+      List<RecipeIngredients> allRecipeIngredients = new List<RecipeIngredients> {};
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
@@ -94,8 +94,8 @@ namespace RecipeBox.Models
     public static RecipeIngredients FindRecipeingredientsById(int searchId)
     {
       int id = 0;
-      int recipeID = "";
-      int ingredientID = "";
+      int recipeID = 0;
+      int ingredientID = 0;
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
@@ -111,7 +111,7 @@ namespace RecipeBox.Models
         recipeID = rdr.GetInt32(1);
         ingredientID = rdr.GetInt32(2);
       }
-      Recipeingredients foundRecipeingredients = new Recipeingredients(recipeID, ingredientID, id);
+      RecipeIngredients foundRecipeingredients = new RecipeIngredients(recipeID, ingredientID, id);
       conn.Close();
       if (conn != null)
       {

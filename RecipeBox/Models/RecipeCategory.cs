@@ -49,13 +49,13 @@ namespace RecipeBox.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO recipe_category (recipeID, categoryID) VALUES (@inputRecipeID, @inputCategoryID);";
+      cmd.CommandText = @"INSERT INTO recipe_category (recipe_id, category_id) VALUES (@inputRecipeID, @inputCategoryID);";
       MySqlParameter newRecipeID = new MySqlParameter();
-      newRecipeID.ParameterRecipeID = "@inputRecipeID";
+      newRecipeID.ParameterName = "@inputRecipeID";
       newRecipeID.Value = this.recipeID;
       cmd.Parameters.Add(newRecipeID);
       MySqlParameter newCategoryID = new MySqlParameter();
-      newCategoryID.ParameterCategoryID = "@inputCategoryID";
+      newCategoryID.ParameterName = "@inputCategoryID";
       newCategoryID.Value = this.categoryID;
       cmd.Parameters.Add(newCategoryID);
       cmd.ExecuteNonQuery();
@@ -89,11 +89,11 @@ namespace RecipeBox.Models
       }
       return allRecipeCategories;
     }
-    public static Category FindRecipeCategoryById(int searchId)
+    public static RecipeCategory FindRecipeCategoryById(int searchId)
     {
       int id = 0;
-      int recipeID = "";
-      int categoryID = "";
+      int recipeID = 0;
+      int categoryID = 0;
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
