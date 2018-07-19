@@ -130,7 +130,7 @@ namespace RecipeBox.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT * FROM recipes Where name = @MatchName;";
+      cmd.CommandText = @"SELECT * FROM recipes WHERE name = @MatchName;";
       MySqlParameter newMatchName = new MySqlParameter();
       newMatchName.ParameterName = "@MatchName";
       newMatchName.Value = searchName;
@@ -150,7 +150,32 @@ namespace RecipeBox.Models
       }
       return foundRecipe;
     }
-
+    public Category GetCategory()
+    {
+      int id = 0;
+      string name = "";
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM categories JOIN recipe_category ON (categories.id = recipe_category.category_id) JOIN recipes ON (recipe_category.recipe_id = recipes.id) WHERE recipes.id = @MatchId;";
+      MySqlParameter newMatchId = new MySqlParameter();
+      newMatchId.ParameterName = "@MatchId";
+      newMatchId.Value = this.id;
+      cmd.Parameters.Add(newMatchId);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        id = rdr.GetInt32(0);
+        name = rdr.GetString(1);
+      }
+      Category foundCategory = new Category(name, id);
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return foundCategory;
+    }
     public static void DeleteAll()
     {
       MySqlConnection conn = DB.Connection();

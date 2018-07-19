@@ -3,7 +3,7 @@
 <ul>
   @foreach (var recipe in Model)
   {
-    <li>Recipe Name: @recipe.GetName() - @recipe.GetRating()</li>
+    <li>Recipe Name: @recipe.GetName(), @recipe.GetCategory().GetName() - @recipe.GetRating()</li>
   }
 </ul>
 

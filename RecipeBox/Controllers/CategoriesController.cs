@@ -19,5 +19,12 @@ namespace RecipeBox.Controllers
     {
       return View();
     }
+    [HttpPost("/Categories/New")]
+    public ActionResult Create(string categoryName)
+    {
+      Category newCategory = new Category(categoryName);
+      newCategory.Save();
+      return RedirectToAction("Index");
+    }
   }
 }

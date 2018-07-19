@@ -11,19 +11,22 @@ namespace RecipeBox.Controllers
     [HttpGet("/Recipes")]
     public ActionResult Index()
     {
-      List<Recipe> newRecipes = Recipe.GetAll();
-      return View(newRecipes);
+      List<Recipe> allRecipes = Recipe.GetAll();
+      return View(allRecipes);
     }
     [HttpGet("/Recipes/new")]
     public ActionResult CreateForm()
     {
-      return View();
+      List<Category> allCategories = Category.GetAll();
+      return View(allCategories);
     }
     [HttpPost("/Recipes/new")]
-    public ActionResult Create(string recipeName, string recipeRating)
+    public ActionResult Create(string recipeName, string recipeRating, string categoryName)
     {
       Recipe newRecipe = new Recipe(recipeName, int.Parse(recipeRating));
       newRecipe.Save();
+      RecipeCategory newPair = new RecipeCategory(newRecipe.GetId(), Category.FindCategoryByName(categoryName).GetId());
+      newPair.Save();
       return RedirectToAction("Index");
     }
 

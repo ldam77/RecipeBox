@@ -9,6 +9,12 @@
     <label for="recipeRating">Enter Recipe Rating</label>
     <input type="number" name="recipeRating" required>
   </div>
+  <select class="form-control" name="categoryName">
+    @foreach (var category in Model)
+    {
+      <option>@category.GetName()</option>
+    }
+  </select>
   <button type="submit" class="">ADD</button>
 </form>
 

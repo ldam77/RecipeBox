@@ -103,6 +103,32 @@ namespace RecipeBox.Models
       }
       return foundCategory;
     }
+    public static Category FindCategoryByName(string searchName)
+    {
+      int id = 0;
+      string name = "";
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM categories WHERE name = @MatchName;";
+      MySqlParameter newMatchName = new MySqlParameter();
+      newMatchName.ParameterName = "@MatchName";
+      newMatchName.Value = searchName;
+      cmd.Parameters.Add(newMatchName);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        id = rdr.GetInt32(0);
+        name = rdr.GetString(1);
+      }
+      Category foundCategory = new Category(name, id);
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return foundCategory;
+    }
 
     public static void DeleteAll()
     {
