@@ -1,0 +1,10 @@
+<h1>List of Recipes</h1>
+
+<ul>
+  @foreach (var recipe in Model)
+  {
+    <li>Recipe Name: @recipe.GetName() - @recipe.GetRating()</li>
+  }
+</ul>
+
+<h3><a href="/">Home</a></h3>

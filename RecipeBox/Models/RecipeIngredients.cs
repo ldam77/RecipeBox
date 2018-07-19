@@ -91,7 +91,7 @@ namespace RecipeBox.Models
       }
       return allRecipeIngredients;
     }
-    public static RecipeIngredients FindRecipeingredientsById(int searchId)
+    public static RecipeIngredients FindRecipeIngredientsById(int searchId)
     {
       int id = 0;
       int recipeID = 0;
