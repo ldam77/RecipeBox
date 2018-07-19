@@ -1,0 +1,39 @@
+@{
+  Layout = "_Layout";
+}
+
+<h1>@Model.GetName()</h1>
+
+<h3>List of Ingredients</h3>
+<ul>
+  @foreach (var ingredient in Model.GetIngredients())
+  {
+    <li>@ingredient.GetName()</li>
+  }
+</ul>
+
+<h3>Add Ingredient</h3>
+<form class="" action="/Recipes/@Model.GetId()/AddIngredient" method="post">
+  <div>
+    <input type="text" name="ingredient" required>
+  </div>
+  <button type="submit" name="button">ADD</button>
+</form>
+
+<h3>Instructions</h3>
+<ol>
+  @foreach (var instruction in Model.GetInstructions())
+  {
+    <li>@instruction.GetInstruction()</li>
+  }
+</ol>
+
+<h3>Add Instruction</h3>
+<form class="" action="/Recipes/@Model.GetId()/AddInstruction" method="post">
+  <div>
+    <input type="text" name="instruction" required>
+  </div>
+  <button type="submit" name="button">ADD</button>
+</form>
+
+<h3><a href="/">Home</a></h3>

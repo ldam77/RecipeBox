@@ -1,3 +1,7 @@
+@{
+  Layout = "_Layout";
+}
+
 <h1>Add Recipe</h1>
 
 <form action="/Recipes/New" method="post">
@@ -5,17 +9,28 @@
     <label for="recipeName">Enter Recipe Name</label>
     <input type="text" name="recipeName" required>
   </div>
-  <div class="">
-    <label for="recipeRating">Enter Recipe Rating</label>
-    <input type="number" name="recipeRating" required>
+  <div>
+    Recipe Rating:
+    <select class="" name="recipeRating">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
   </div>
-  <select class="form-control" name="categoryName">
-    @foreach (var category in Model)
-    {
-      <option>@category.GetName()</option>
-    }
-  </select>
-  <button type="submit" class="">ADD</button>
+  <div>
+    Category:
+    <select class="" name="categoryName">
+      @foreach (var category in Model)
+      {
+        <option>@category.GetName()</option>
+      }
+    </select>
+  </div>
+  <div>
+    <button type="submit" class="">ADD</button>
+  </div>
 </form>
 
 

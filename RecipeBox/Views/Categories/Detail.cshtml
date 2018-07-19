@@ -1,10 +1,14 @@
+@{
+  Layout = "_Layout";
+}
+
 <h1>@Model.GetName() Detail:</h1>
 
 <h3>Recipe List</h3>
 <ul>
   @foreach (var recipe in Model.GetRecipes())
   {
-    <li>@recipe.GetName()</li>
+    <li><a href="/Recipes/@recipe.GetId()">@recipe.GetName()</a></li>
   }
 </ul>
 

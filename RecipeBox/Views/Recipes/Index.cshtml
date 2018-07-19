@@ -1,9 +1,18 @@
+@{
+  Layout = "_Layout";
+}
+
 <h1>List of Recipes</h1>
+
+@if(Model.Count == 0)
+{
+  <h2>No recipe found</h2>
+}
 
 <ul>
   @foreach (var recipe in Model)
   {
-    <li>Recipe Name: @recipe.GetName(); Recipe Category: @recipe.GetCategory().GetName(); Rating: @recipe.GetRating()</li>
+    <li>Recipe Name: <a href="/Recipes/@recipe.GetId()">@recipe.GetName()</a>; Recipe Category: @recipe.GetCategory().GetName(); Rating: @recipe.GetRating()</li>
   }
 </ul>
 

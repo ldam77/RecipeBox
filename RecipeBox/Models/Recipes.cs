@@ -122,34 +122,64 @@ namespace RecipeBox.Models
       return foundRecipe;
     }
 
-    public static Recipe FindRecipeByName(string searchName)
+    public static List<Recipe> FindRecipeByName(string searchName)
     {
-      int id = 0;
-      string name = "";
-      int rating = 0;
+      List<Recipe> foundRecipes = new List<Recipe> {};
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT * FROM recipes WHERE name = @MatchName;";
+      cmd.CommandText = @"SELECT * FROM recipes WHERE name LIKE @MatchName;";
       MySqlParameter newMatchName = new MySqlParameter();
       newMatchName.ParameterName = "@MatchName";
-      newMatchName.Value = searchName;
+      newMatchName.Value = searchName + "%";
       cmd.Parameters.Add(newMatchName);
       MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
       while(rdr.Read())
       {
-        id = rdr.GetInt32(0);
-        name = rdr.GetString(1);
-        rating = rdr.GetInt32(2);
+        int id = rdr.GetInt32(0);
+        string name = rdr.GetString(1);
+        int rating = rdr.GetInt32(2);
+
+        Recipe newRecipe = new Recipe(name, rating, id);
+        foundRecipes.Add(newRecipe);
       }
-      Recipe foundRecipe = new Recipe(name, rating, id);
       conn.Close();
       if (conn != null)
       {
         conn.Dispose();
       }
-      return foundRecipe;
+      return foundRecipes;
     }
+
+    public static List<Recipe> FindRecipeByIngredient(string searchName)
+    {
+      List<Recipe> foundRecipes = new List<Recipe> {};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT recipes.* FROM recipes JOIN recipe_ingredients ON (recipes.id = recipe_ingredients.id) JOIN ingredients ON (recipe_ingredients.id = ingredients.id) WHERE ingredients.name LIKE @MatchName;";
+      MySqlParameter newMatchName = new MySqlParameter();
+      newMatchName.ParameterName = "@MatchName";
+      newMatchName.Value = searchName + "%";
+      cmd.Parameters.Add(newMatchName);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        int id = rdr.GetInt32(0);
+        string name = rdr.GetString(1);
+        int rating = rdr.GetInt32(2);
+
+        Recipe newRecipe = new Recipe(name, rating, id);
+        foundRecipes.Add(newRecipe);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return foundRecipes;
+    }
+
     public Category GetCategory()
     {
       int id = 0;
@@ -176,6 +206,62 @@ namespace RecipeBox.Models
       }
       return foundCategory;
     }
+
+    public List<Instruction> GetInstructions()
+    {
+      List<Instruction> allInstructions = new List<Instruction> {};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM instructions WHERE recipe_id = @MatchId;";
+      MySqlParameter newMatchId = new MySqlParameter();
+      newMatchId.ParameterName = "@MatchId";
+      newMatchId.Value = this.id;
+      cmd.Parameters.Add(newMatchId);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        int id = rdr.GetInt32(0);
+        string instruction = rdr.GetString(1);
+        int recipeId = rdr.GetInt32(2);
+        Instruction newInstruction = new Instruction(instruction, recipeId, id);
+        allInstructions.Add(newInstruction);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return allInstructions;
+    }
+
+    public List<Ingredient> GetIngredients()
+    {
+      List<Ingredient> allIngredients = new List<Ingredient> {};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT ingredients.* FROM ingredients JOIN recipe_ingredients ON (ingredients.id = recipe_ingredients.ingredient_id) JOIN recipes ON (recipe_ingredients.recipe_id = recipes.id) WHERE recipes.id = @MatchId;";
+      MySqlParameter newMatchId = new MySqlParameter();
+      newMatchId.ParameterName = "@MatchId";
+      newMatchId.Value = this.id;
+      cmd.Parameters.Add(newMatchId);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        int id = rdr.GetInt32(0);
+        string name = rdr.GetString(1);
+        Ingredient newIngredient = new Ingredient(name, id);
+        allIngredients.Add(newIngredient);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return allIngredients;
+    }
+
     public static void DeleteAll()
     {
       MySqlConnection conn = DB.Connection();
