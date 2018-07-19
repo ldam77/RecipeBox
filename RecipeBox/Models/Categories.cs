@@ -129,7 +129,34 @@ namespace RecipeBox.Models
       }
       return foundCategory;
     }
+    public List<Recipe> GetRecipes()
+    {
+      List<Recipe> foundRecipes = new List<Recipe> {};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT recipes.* FROM categories JOIN recipe_category ON (categories.id = recipe_category.category_id) JOIN recipes ON (recipe_category.recipe_id = recipes.id) WHERE categories.id = @MatchId;";
+      MySqlParameter newMatchId = new MySqlParameter();
+      newMatchId.ParameterName = "@MatchId";
+      newMatchId.Value = this.id;
+      cmd.Parameters.Add(newMatchId);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        int id = rdr.GetInt32(0);
+        string name = rdr.GetString(1);
+        int rating = rdr.GetInt32(2);
 
+        Recipe newRecipe = new Recipe(name, rating, id);
+        foundRecipes.Add(newRecipe);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return foundRecipes;
+    }
     public static void DeleteAll()
     {
       MySqlConnection conn = DB.Connection();

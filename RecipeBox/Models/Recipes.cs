@@ -157,7 +157,7 @@ namespace RecipeBox.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT * FROM categories JOIN recipe_category ON (categories.id = recipe_category.category_id) JOIN recipes ON (recipe_category.recipe_id = recipes.id) WHERE recipes.id = @MatchId;";
+      cmd.CommandText = @"SELECT categories.* FROM categories JOIN recipe_category ON (categories.id = recipe_category.category_id) JOIN recipes ON (recipe_category.recipe_id = recipes.id) WHERE recipes.id = @MatchId;";
       MySqlParameter newMatchId = new MySqlParameter();
       newMatchId.ParameterName = "@MatchId";
       newMatchId.Value = this.id;

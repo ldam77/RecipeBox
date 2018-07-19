@@ -3,7 +3,7 @@
 <ul>
   @foreach (var category in Model)
   {
-    <li>Category Name: @category.GetName()</li>
+    <li>Category Name: <a href="/Categories/@category.GetId()">@category.GetName()</a></li>
   }
 </ul>
 

@@ -26,5 +26,11 @@ namespace RecipeBox.Controllers
       newCategory.Save();
       return RedirectToAction("Index");
     }
+    [HttpGet("Categories/{id}")]
+    public ActionResult Detail(int id)
+    {
+      Category newCategory = Category.FindCategoryById(id);
+      return View(newCategory);
+    }
   }
 }

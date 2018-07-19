@@ -1,0 +1,11 @@
+<h1>@Model.GetName() Detail:</h1>
+
+<h3>Recipe List</h3>
+<ul>
+  @foreach (var recipe in Model.GetRecipes())
+  {
+    <li>@recipe.GetName()</li>
+  }
+</ul>
+
+<h3><a href="/">Home</a></h3>
